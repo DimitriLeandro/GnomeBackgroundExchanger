@@ -14,17 +14,32 @@ public class MainExchanger {
     private boolean rodar = true;
     private ArrayList<String> vetorImagens;
     private int contImagens;
+    private int delay;
 
-    public void iniciarThread(ArrayList<String> imagens) {
+    public void iniciarThread(ArrayList<String> imagens, String tempo) {
         rodar = true;
         vetorImagens = imagens;
         contImagens = imagens.size();
+        delay = tempoToInt(tempo);
 
         new Thread(trocarPlanoDeFundo).start();
     }
 
     public void pararThread() {
         rodar = false;
+    }
+    
+    private int tempoToInt(String tempo){
+        switch(tempo){
+            case "Trocar a cada 1 minuto": return (1000 * 60);
+            case "Trocar a cada 5 minutos": return (1000 * 60 * 5);
+            case "Trocar a cada 10 minutos": return (1000 * 60 * 10);
+            case "Trocar a cada 1 hora": return (1000 * 60 * 60);
+            case "Trocar a cada 5 horas": return (1000 * 60 * 60 * 5);
+            case "Trocar a cada 10 horas": return (1000 * 60 * 60 * 10);
+        }
+        
+        return 0;
     }
 
     private Runnable trocarPlanoDeFundo = new Runnable() {
@@ -45,7 +60,7 @@ public class MainExchanger {
                         }
 
                         Process process = Runtime.getRuntime().exec(fullComando, null);
-                        Thread.sleep(1500);
+                        Thread.sleep(delay);
                     } catch (IOException | InterruptedException ex) {
                         Logger.getLogger(MainExchanger.class.getName()).log(Level.SEVERE, null, ex);
                     }

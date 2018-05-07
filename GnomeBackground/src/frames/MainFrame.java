@@ -1,8 +1,14 @@
 package frames;
 
 import classes.MainExchanger;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
 
 /**
  *
@@ -11,18 +17,21 @@ import javax.swing.JOptionPane;
 public class MainFrame extends javax.swing.JFrame {
 
     private MainExchanger objMainExchanger;
-    private ArrayList<String> imagens;
-    private int contImagens;
+    private ArrayList<String> arrayImagens;
+    private File objFile;
+    private Scanner objSc;
 
     public MainFrame() {
         initComponents();
+        this.setLocationRelativeTo(null);
 
         //HELLO FEDORA!
         System.out.println("Hello Fedora!");
 
         //Criandoo objeto que vai ficar trocando o plano de fundo einiciando as variáveis
         objMainExchanger = new MainExchanger();
-        imagens = new ArrayList();
+        arrayImagens = new ArrayList();
+        objFile = new File("db.txt");
     }
 
     @SuppressWarnings("unchecked")
@@ -32,8 +41,10 @@ public class MainFrame extends javax.swing.JFrame {
         btnComecar = new javax.swing.JButton();
         btnParar = new javax.swing.JButton();
         btnAdd = new javax.swing.JButton();
+        cmbTempo = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Gnome Background Exchanger");
 
         btnComecar.setText("Começar");
         btnComecar.addActionListener(new java.awt.event.ActionListener() {
@@ -56,29 +67,36 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
 
+        cmbTempo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Trocar a cada 1 minuto", "Trocar a cada 5 minutos", "Trocar a cada 10 minutos", "Trocar a cada 1 hora", "Trocar a cada 5 horas", "Trocar a cada 10 horas" }));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
+                .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cmbTempo, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(btnComecar, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnParar, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(0, 14, Short.MAX_VALUE))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnComecar)
-                    .addComponent(btnParar))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(cmbTempo, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnComecar)
+                            .addComponent(btnParar)))
+                    .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
 
@@ -86,7 +104,21 @@ public class MainFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnComecarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnComecarActionPerformed
-        objMainExchanger.iniciarThread(imagens);
+        try {            
+            objSc = new Scanner(objFile);
+
+            arrayImagens.clear();
+            
+            while (objSc.hasNextLine()) {
+                arrayImagens.add(objSc.nextLine());
+            }
+            
+            objSc.close();
+        } catch (FileNotFoundException e) {
+            System.out.println(e);
+        }
+
+        objMainExchanger.iniciarThread(arrayImagens, cmbTempo.getSelectedItem().toString());
     }//GEN-LAST:event_btnComecarActionPerformed
 
     private void btnPararActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPararActionPerformed
@@ -94,7 +126,13 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btnPararActionPerformed
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
-        imagens.add(JOptionPane.showInputDialog(null, "Entre com o caminho da imagem. \nExemplo: /home/dimi/Pictures/a.jpg"));
+        try {
+            //imagens.add(JOptionPane.showInputDialog(null, "Entre com o caminho da imagem. \nExemplo: /home/dimi/Pictures/a.jpg"));
+            Process process = Runtime.getRuntime().exec("gedit db.txt", null);
+        } catch (IOException ex) {
+            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
     }//GEN-LAST:event_btnAddActionPerformed
 
     /**
@@ -136,5 +174,6 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JButton btnAdd;
     private javax.swing.JButton btnComecar;
     private javax.swing.JButton btnParar;
+    private javax.swing.JComboBox<String> cmbTempo;
     // End of variables declaration//GEN-END:variables
 }
