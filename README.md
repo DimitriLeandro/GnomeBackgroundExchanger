@@ -5,4 +5,4 @@ So I decided to create a java application to automatically change background ima
 
 Here you can define which images you want and how often they should change.
 
-![alt text](https://raw.githubusercontent.com/DimitriLeandro/GnomeBackgroundExchange/master/Screenshot.png)
+![alt text](https://github.com/DimitriLeandro/GnomeBackgroundExchanger/blob/master/Screenshot.png)
