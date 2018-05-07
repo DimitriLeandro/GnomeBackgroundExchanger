@@ -1,7 +1,11 @@
 package classes;
 
+import frames.MainFrame;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -12,33 +16,81 @@ import java.util.logging.Logger;
 public class MainExchanger {
 
     private boolean rodar = true;
-    private ArrayList<String> vetorImagens;
-    private int contImagens;
     private int delay;
+    private ArrayList<String> arrayImagens;
+    private final File objFile;
+    private Scanner objSc;
 
-    public void iniciarThread(ArrayList<String> imagens, String tempo) {
+    public MainExchanger() {
+        arrayImagens = new ArrayList();
+        objFile = new File("db.txt");
+    }
+
+    public void iniciarThread(String tempo) {
+        lerTxt();
         rodar = true;
-        vetorImagens = imagens;
-        contImagens = imagens.size();
         delay = tempoToInt(tempo);
+
+        System.out.println("Iniciando thread: \nrodar = " + rodar + "\ndelay: " + delay + "\n");
 
         new Thread(trocarPlanoDeFundo).start();
     }
 
     public void pararThread() {
         rodar = false;
+        System.out.println("Thread parada: rodar = " + rodar + "\n");
     }
-    
-    private int tempoToInt(String tempo){
-        switch(tempo){
-            case "Trocar a cada 1 minuto": return (1000 * 60);
-            case "Trocar a cada 5 minutos": return (1000 * 60 * 5);
-            case "Trocar a cada 10 minutos": return (1000 * 60 * 10);
-            case "Trocar a cada 1 hora": return (1000 * 60 * 60);
-            case "Trocar a cada 5 horas": return (1000 * 60 * 60 * 5);
-            case "Trocar a cada 10 horas": return (1000 * 60 * 60 * 10);
+
+    public void abrirTxt() {
+        try {
+            Process process = Runtime.getRuntime().exec("gedit db.txt", null);
+        } catch (IOException ex) {
+            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+    }
+
+    public void lerTxt() {
+        try {
+            System.out.println("Iniciando a leitura do db.txt" + "\n");
+
+            objSc = new Scanner(objFile);
+
+            arrayImagens.clear();
+
+            while (objSc.hasNextLine()) {
+                arrayImagens.add(objSc.nextLine());
+            }
+
+            objSc.close();
+        } catch (FileNotFoundException e) {
+            System.out.println(e);
+        }
+    }
+
+    private int tempoToInt(String tempo) {
+        switch (tempo) {
+            case "Trocar a cada 1 segundo":
+                return (1000);
+            case "Trocar a cada 5 segundos":
+                return (1000 * 5);
+            case "Trocar a cada 10 segundos":
+                return (1000 * 10);
+            case "Trocar a cada 30 segundos":
+                return (1000 * 30);
+            case "Trocar a cada 1 minuto":
+                return (1000 * 60);
+            case "Trocar a cada 5 minutos":
+                return (1000 * 60 * 5);
+            case "Trocar a cada 10 minutos":
+                return (1000 * 60 * 10);
+            case "Trocar a cada 1 hora":
+                return (1000 * 60 * 60);
+            case "Trocar a cada 5 horas":
+                return (1000 * 60 * 60 * 5);
+            case "Trocar a cada 10 horas":
+                return (1000 * 60 * 60 * 10);
+        }
+
         return 0;
     }
 
@@ -46,20 +98,19 @@ public class MainExchanger {
         @Override
         public void run() {
             try {
-                //vou fazer uma string com o comando de mudar o plano de fundo, aí no final é só ir colocando o caminho pro arquivo
-                String comando = "gsettings set org.gnome.desktop.background picture-uri ";
-                String fullComando = "";
                 int i = 0;
-
+                String comando;
+                
                 while (rodar == true) {
                     try {
-                        fullComando = comando + vetorImagens.get(i);
+                        comando = "gsettings set org.gnome.desktop.background picture-uri " + arrayImagens.get(i);
+                        System.out.println("Exibindo " + arrayImagens.get(i));
                         i++;
-                        if (i >= contImagens) {
+                        if (i >= arrayImagens.size()) {
                             i = 0;
                         }
 
-                        Process process = Runtime.getRuntime().exec(fullComando, null);
+                        Process process = Runtime.getRuntime().exec(comando, null);
                         Thread.sleep(delay);
                     } catch (IOException | InterruptedException ex) {
                         Logger.getLogger(MainExchanger.class.getName()).log(Level.SEVERE, null, ex);

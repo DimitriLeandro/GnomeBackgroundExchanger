@@ -79,7 +79,7 @@
     </Component>
     <Component class="javax.swing.JButton" name="btnAdd">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Adicionar Imagens"/>
+        <Property name="text" type="java.lang.String" value="Selecionar Imagens"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAddActionPerformed"/>
@@ -88,13 +88,17 @@
     <Component class="javax.swing.JComboBox" name="cmbTempo">
       <Properties>
         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-          <StringArray count="6">
-            <StringItem index="0" value="Trocar a cada 1 minuto"/>
-            <StringItem index="1" value="Trocar a cada 5 minutos"/>
-            <StringItem index="2" value="Trocar a cada 10 minutos"/>
-            <StringItem index="3" value="Trocar a cada 1 hora"/>
-            <StringItem index="4" value="Trocar a cada 5 horas"/>
-            <StringItem index="5" value="Trocar a cada 10 horas"/>
+          <StringArray count="10">
+            <StringItem index="0" value="Trocar a cada 1 segundo"/>
+            <StringItem index="1" value="Trocar a cada 5 segundos"/>
+            <StringItem index="2" value="Trocar a cada 10 segundos"/>
+            <StringItem index="3" value="Trocar a cada 30 segundos"/>
+            <StringItem index="4" value="Trocar a cada 1 minuto"/>
+            <StringItem index="5" value="Trocar a cada 5 minutos"/>
+            <StringItem index="6" value="Trocar a cada 10 minutos"/>
+            <StringItem index="7" value="Trocar a cada 1 hora"/>
+            <StringItem index="8" value="Trocar a cada 5 horas"/>
+            <StringItem index="9" value="Trocar a cada 10 horas"/>
           </StringArray>
         </Property>
       </Properties>

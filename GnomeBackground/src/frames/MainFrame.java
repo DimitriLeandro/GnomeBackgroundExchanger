@@ -1,14 +1,6 @@
 package frames;
 
 import classes.MainExchanger;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.JOptionPane;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.Scanner;
 
 /**
  *
@@ -16,10 +8,7 @@ import java.util.Scanner;
  */
 public class MainFrame extends javax.swing.JFrame {
 
-    private MainExchanger objMainExchanger;
-    private ArrayList<String> arrayImagens;
-    private File objFile;
-    private Scanner objSc;
+    private final MainExchanger objMainExchanger;
 
     public MainFrame() {
         initComponents();
@@ -28,10 +17,8 @@ public class MainFrame extends javax.swing.JFrame {
         //HELLO FEDORA!
         System.out.println("Hello Fedora!");
 
-        //Criandoo objeto que vai ficar trocando o plano de fundo einiciando as variáveis
+        //Criandoo objeto que vai ficar trocando o plano de fundo e iniciando as variáveis
         objMainExchanger = new MainExchanger();
-        arrayImagens = new ArrayList();
-        objFile = new File("db.txt");
     }
 
     @SuppressWarnings("unchecked")
@@ -60,14 +47,14 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
 
-        btnAdd.setText("Adicionar Imagens");
+        btnAdd.setText("Selecionar Imagens");
         btnAdd.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAddActionPerformed(evt);
             }
         });
 
-        cmbTempo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Trocar a cada 1 minuto", "Trocar a cada 5 minutos", "Trocar a cada 10 minutos", "Trocar a cada 1 hora", "Trocar a cada 5 horas", "Trocar a cada 10 horas" }));
+        cmbTempo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Trocar a cada 1 segundo", "Trocar a cada 5 segundos", "Trocar a cada 10 segundos", "Trocar a cada 30 segundos", "Trocar a cada 1 minuto", "Trocar a cada 5 minutos", "Trocar a cada 10 minutos", "Trocar a cada 1 hora", "Trocar a cada 5 horas", "Trocar a cada 10 horas" }));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -104,21 +91,7 @@ public class MainFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnComecarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnComecarActionPerformed
-        try {            
-            objSc = new Scanner(objFile);
-
-            arrayImagens.clear();
-            
-            while (objSc.hasNextLine()) {
-                arrayImagens.add(objSc.nextLine());
-            }
-            
-            objSc.close();
-        } catch (FileNotFoundException e) {
-            System.out.println(e);
-        }
-
-        objMainExchanger.iniciarThread(arrayImagens, cmbTempo.getSelectedItem().toString());
+        objMainExchanger.iniciarThread(cmbTempo.getSelectedItem().toString());
     }//GEN-LAST:event_btnComecarActionPerformed
 
     private void btnPararActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPararActionPerformed
@@ -126,13 +99,7 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btnPararActionPerformed
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
-        try {
-            //imagens.add(JOptionPane.showInputDialog(null, "Entre com o caminho da imagem. \nExemplo: /home/dimi/Pictures/a.jpg"));
-            Process process = Runtime.getRuntime().exec("gedit db.txt", null);
-        } catch (IOException ex) {
-            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
+        objMainExchanger.abrirTxt();
     }//GEN-LAST:event_btnAddActionPerformed
 
     /**

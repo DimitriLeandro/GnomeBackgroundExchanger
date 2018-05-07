@@ -1,6 +1,3 @@
 /home/dimi/Pictures/a.jpg
-/home/dimi/Pictures/b.jpg
 /home/dimi/Pictures/c.jpg
-/home/dimi/Pictures/d.jpg
-/home/dimi/Pictures/e.jpg
 /home/dimi/Pictures/f.jpg
