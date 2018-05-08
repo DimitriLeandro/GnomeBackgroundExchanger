@@ -1,8 +1,8 @@
-Installation Instructions.
+# INSTALATION INSTRUCTIONS
 
 First, you must copy the folder "Gnome_Background_Exchanger" to your "opt" folder. If you can't paste it there, probably you had permission denied, so, open Nautilus as Root to do that.
 
-After pasting it there, make shure to give "create and delete files" access to "Gnome_Background_Exchanger" folder to all kind of users. This will be necessary afterwords.
+After pasting it there, make shure to give "create and delete files" and "read and write" access to "Gnome_Background_Exchanger" folder to all kind of users. This will be necessary afterwords.
 
 Then, create a desktop launcher to the aplication. Copy "Gnome Background Exchanger.desktop" to "usr/share/applications". Again, if you can't do it, just open Nautilus as Root.
 
