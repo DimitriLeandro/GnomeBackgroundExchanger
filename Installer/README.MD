@@ -8,14 +8,14 @@ Then, create a desktop launcher to the aplication. Copy "Gnome Background Exchan
 
 The application won't run if you don't have "default jre" installed in your system. You can install it by "sudo apt-get install default-jre" in Ubuntu based systems, or "sudo yum install java-1.8.0-openjdk" in Fedora systems.
 
+You must have "gedit" installed in your system too. You can get that by "sudo apt-get install gedit" or "sudo dnf install gedit".
+
 And that is it!
 
 Obs: When you run the application, select "Selecionar Imagens" button. Here is an exemple of what should be there:
 
 file:///home/dimi/Pictures/a.jpg
-
 file:///home/dimi/Pictures/b.jpg
-
 file:///home/dimi/Pictures/c.jpg
 
 Dimitri Leandro

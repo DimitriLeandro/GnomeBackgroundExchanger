@@ -17,6 +17,7 @@ public class MainExchanger {
 
     private boolean rodar = true;
     private int delay;
+    private String comando;
     private ArrayList<String> arrayImagens;
     private final File objFile;
     private Scanner objSc;
@@ -25,18 +26,18 @@ public class MainExchanger {
         this.trocarPlanoDeFundo = () -> {
             try {
                 int i = 0;
-                String comando;
+                String fullCommand;
                 
                 while (rodar == true) {
                     try {
-                        comando = "gsettings set org.gnome.desktop.background picture-uri " + arrayImagens.get(i);
+                        fullCommand = comando + arrayImagens.get(i);
                         System.out.println("Exibindo " + arrayImagens.get(i));
                         i++;
                         if (i >= arrayImagens.size()) {
                             i = 0;
                         }
                         
-                        Process process = Runtime.getRuntime().exec(comando, null);
+                        Process process = Runtime.getRuntime().exec(fullCommand, null);
                         Thread.sleep(delay);
                     } catch (IOException | InterruptedException ex) {
                         Logger.getLogger(MainExchanger.class.getName()).log(Level.SEVERE, null, ex);
@@ -50,10 +51,11 @@ public class MainExchanger {
         objFile = new File("/opt/Gnome_Background_Exchanger/db.txt");
     }
 
-    public void iniciarThread(String tempo) {
+    public void iniciarThread(String tempo, String systemInterface) {
         lerTxt();
         rodar = true;
         delay = tempoToInt(tempo);
+        comando = interfaceToCommand(systemInterface);
 
         System.out.println("Iniciando thread: \nrodar = " + rodar + "\ndelay: " + delay + "\n");
 
@@ -116,6 +118,16 @@ public class MainExchanger {
         }
 
         return 0;
+    }
+    
+    private String interfaceToCommand(String systemInterface){
+        switch(systemInterface){
+            case "Gnome": return "gsettings set org.gnome.desktop.background picture-uri ";
+            case "Mate": return "gsettings set org.mate.background picture-uri ";
+            case "KDE": return "";
+        }
+        
+        return "";
     }
 
     private final Runnable trocarPlanoDeFundo;
