@@ -47,7 +47,7 @@ public class MainExchanger {
             }
         };
         arrayImagens = new ArrayList();
-        objFile = new File("db.txt");
+        objFile = new File("/opt/Gnome_Background_Exchanger/db.txt");
     }
 
     public void iniciarThread(String tempo) {
