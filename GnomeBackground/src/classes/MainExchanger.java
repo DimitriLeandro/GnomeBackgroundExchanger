@@ -11,7 +11,7 @@ import java.util.logging.Logger;
 
 /**
  *
- * @author dimi
+ * @author dimitri leandro
  */
 public class MainExchanger {
 
@@ -22,6 +22,30 @@ public class MainExchanger {
     private Scanner objSc;
 
     public MainExchanger() {
+        this.trocarPlanoDeFundo = () -> {
+            try {
+                int i = 0;
+                String comando;
+                
+                while (rodar == true) {
+                    try {
+                        comando = "gsettings set org.gnome.desktop.background picture-uri " + arrayImagens.get(i);
+                        System.out.println("Exibindo " + arrayImagens.get(i));
+                        i++;
+                        if (i >= arrayImagens.size()) {
+                            i = 0;
+                        }
+                        
+                        Process process = Runtime.getRuntime().exec(comando, null);
+                        Thread.sleep(delay);
+                    } catch (IOException | InterruptedException ex) {
+                        Logger.getLogger(MainExchanger.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            } catch (Exception e) {
+                System.out.println("Não foi possível começar a thread: " + e);
+            }
+        };
         arrayImagens = new ArrayList();
         objFile = new File("db.txt");
     }
@@ -43,7 +67,7 @@ public class MainExchanger {
 
     public void abrirTxt() {
         try {
-            Process process = Runtime.getRuntime().exec("gedit db.txt", null);
+            Runtime.getRuntime().exec("gedit /opt/Gnome_Background_Exchanger/db.txt", null);
         } catch (IOException ex) {
             Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -94,31 +118,5 @@ public class MainExchanger {
         return 0;
     }
 
-    private Runnable trocarPlanoDeFundo = new Runnable() {
-        @Override
-        public void run() {
-            try {
-                int i = 0;
-                String comando;
-                
-                while (rodar == true) {
-                    try {
-                        comando = "gsettings set org.gnome.desktop.background picture-uri " + arrayImagens.get(i);
-                        System.out.println("Exibindo " + arrayImagens.get(i));
-                        i++;
-                        if (i >= arrayImagens.size()) {
-                            i = 0;
-                        }
-
-                        Process process = Runtime.getRuntime().exec(comando, null);
-                        Thread.sleep(delay);
-                    } catch (IOException | InterruptedException ex) {
-                        Logger.getLogger(MainExchanger.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
-            } catch (Exception e) {
-                System.out.println("Não foi possível começar a thread: " + e);
-            }
-        }
-    };
+    private final Runnable trocarPlanoDeFundo;
 }
