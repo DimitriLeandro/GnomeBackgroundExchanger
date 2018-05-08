@@ -122,8 +122,8 @@ public class MainExchanger {
     
     private String interfaceToCommand(String systemInterface){
         switch(systemInterface){
-            case "Gnome": return "gsettings set org.gnome.desktop.background picture-uri ";
-            case "Mate": return "gsettings set org.mate.background picture-uri ";
+            case "Gnome": return "gsettings set org.gnome.desktop.background picture-uri file://";
+            case "Mate": return "gsettings set org.mate.background picture-filename ";
             case "KDE": return "";
         }
         
