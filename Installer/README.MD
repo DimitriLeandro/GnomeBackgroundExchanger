@@ -15,7 +15,9 @@ And that is it!
 Obs: When you run the application, select "Selecionar Imagens" button. Here is an exemple of what should be there:
 
 file:///home/dimi/Pictures/a.jpg
+
 file:///home/dimi/Pictures/b.jpg
+
 file:///home/dimi/Pictures/c.jpg
 
 Dimitri Leandro
