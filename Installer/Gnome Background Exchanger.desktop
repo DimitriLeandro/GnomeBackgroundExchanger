@@ -1,7 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Type=Application
-Exec=java -jar /opt/Gnome_Background_Exchanger/gbexc.jar
+Exec=java -cp /opt/Gnome_Background_Exchanger/gbexc.jar:lib/* frames.MainFrame
 Icon=java
 Name=Gnome Background Exchanger
 Comment=Criando um iniciavel do Gnome Background Exchanger
