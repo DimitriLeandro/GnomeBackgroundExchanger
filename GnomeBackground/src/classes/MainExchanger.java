@@ -124,7 +124,6 @@ public class MainExchanger {
         switch(systemInterface){
             case "Gnome": return "gsettings set org.gnome.desktop.background picture-uri file://";
             case "Mate": return "gsettings set org.mate.background picture-filename ";
-            case "KDE": return "";
         }
         
         return "";

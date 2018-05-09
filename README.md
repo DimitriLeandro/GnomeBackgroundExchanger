@@ -3,6 +3,6 @@ I recently installed Fedora 26 OS and realized that there were not many options 
 
 Here you can define which images you want and how often they should change.
 
-Update: I've made updates to run this app in Mate and KDE interfaces too. It was developed in Fedora 26, but tested in Ubuntu 16.04 LTS, Ubuntu Mate 18.04 LTS and Kubuntu 17.10.
+Update: I've made updates to run this app in Mate interface too. It was developed in Fedora 26, but tested in Ubuntu 16.04 LTS and Ubuntu Mate 18.04 LTS.
 
 ![alt text](https://github.com/DimitriLeandro/GnomeBackgroundExchanger/blob/master/Screenshot.png)
