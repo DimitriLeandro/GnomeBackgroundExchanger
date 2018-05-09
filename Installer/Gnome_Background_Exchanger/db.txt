@@ -1,0 +1,3 @@
+/home/your_username/Pictures/exemple.jpg
+/home/your_username/Downloads/another_exemple.jpg
+/home/your_username/Documents/one_more_exemple.jpg

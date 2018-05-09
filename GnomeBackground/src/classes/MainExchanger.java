@@ -124,6 +124,7 @@ public class MainExchanger {
         switch(systemInterface){
             case "Gnome": return "gsettings set org.gnome.desktop.background picture-uri file://";
             case "Mate": return "gsettings set org.mate.background picture-filename ";
+            case "Cinnamon": return "gsettings set org.cinnamon.desktop.background picture-uri file://";
         }
         
         return "";

@@ -67,7 +67,7 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
 
-        cmbInterface.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Gnome", "Mate" }));
+        cmbInterface.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Gnome", "Mate", "Cinnamon" }));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);

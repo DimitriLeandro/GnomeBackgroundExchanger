@@ -2,7 +2,7 @@
 Encoding=UTF-8
 Type=Application
 Exec=java -cp /opt/Gnome_Background_Exchanger/gbexc.jar:lib/* frames.MainFrame
-Icon=java
+Icon=/opt/Gnome_Background_Exchanger/icon.png
 Name=Gnome Background Exchanger
-Comment=Criando um iniciavel do Gnome Background Exchanger
+Comment=Aplicação para trocar o plano de fundo automaticamente
 Name[en_US]=Gnome Background Exchanger

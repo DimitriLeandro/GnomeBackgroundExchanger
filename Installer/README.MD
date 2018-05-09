@@ -12,12 +12,4 @@ You must have "gedit" installed in your system too. You can get that by "sudo ap
 
 And that is it!
 
-Obs: When you run the application, select "Selecionar Imagens" button. Here is an exemple of what should be there:
-
-/home/dimi/Pictures/a.jpg
-
-/home/dimi/Pictures/b.jpg
-
-/home/dimi/Pictures/c.jpg
-
 Dimitri Leandro
