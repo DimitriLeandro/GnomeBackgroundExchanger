@@ -37,7 +37,7 @@ public class MainExchanger {
                             i = 0;
                         }
                         
-                        Process process = Runtime.getRuntime().exec(fullCommand, null);
+                        Runtime.getRuntime().exec(fullCommand, null);
                         Thread.sleep(delay);
                     } catch (IOException | InterruptedException ex) {
                         Logger.getLogger(MainExchanger.class.getName()).log(Level.SEVERE, null, ex);
