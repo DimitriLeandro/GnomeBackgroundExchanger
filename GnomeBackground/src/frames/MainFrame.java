@@ -1,25 +1,43 @@
 package frames;
 
+import classes.ImagensOnline;
 import classes.MainExchanger;
+import classes.ManipuladorTxt;
 import java.awt.Toolkit;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 /**
  *
- * @author dimitri leandro 
+ * @author dimitri leandro
  */
 public class MainFrame extends javax.swing.JFrame {
 
     protected MainExchanger objMainExchanger;
-    
+    private byte tab;
+    private ManipuladorTxt objManipuladorTxt;
+    private PanelOnline objPanelOnline;
+
     public MainFrame() {
         initComponents();
         this.setLocationRelativeTo(null);
         this.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/imagens/icon.png")));
-        
+
+        tab = 0;
         objMainExchanger = new MainExchanger();
-        tbbPainelAbas.add("Offline", new PanelOffline(objMainExchanger, this));
-        //tbbPainelAbas.add("Online", panOnline); 
-        
+        objManipuladorTxt = new ManipuladorTxt();
+        objPanelOnline = new PanelOnline();
+        tbbPainelAbas.add("Offline", new PanelOffline(objMainExchanger, objManipuladorTxt));
+        tbbPainelAbas.add("Online", objPanelOnline);
+        tbbPainelAbas.addChangeListener(new ChangeListener() {
+            public void stateChanged(ChangeEvent e) {
+                tab = (byte) tbbPainelAbas.getSelectedIndex();
+            }
+        });
+
     }
 
     @SuppressWarnings("unchecked")
@@ -28,6 +46,11 @@ public class MainFrame extends javax.swing.JFrame {
         bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
         tbbPainelAbas = new javax.swing.JTabbedPane();
+        cmbTempo = new javax.swing.JComboBox<>();
+        btnComecar = new javax.swing.JButton();
+        btnParar = new javax.swing.JButton();
+        cmbInterface = new javax.swing.JComboBox<>();
+        btnEsconder = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setName("GnomeBackgroundExchanger"); // NOI18N
@@ -38,27 +61,102 @@ public class MainFrame extends javax.swing.JFrame {
         bindingGroup.addBinding(binding);
 
         tbbPainelAbas.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-        tbbPainelAbas.setPreferredSize(new java.awt.Dimension(572, 130));
+        tbbPainelAbas.setPreferredSize(new java.awt.Dimension(572, 125));
+
+        cmbTempo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Trocar a cada 1 segundo", "Trocar a cada 5 segundos", "Trocar a cada 10 segundos", "Trocar a cada 30 segundos", "Trocar a cada 1 minuto", "Trocar a cada 5 minutos", "Trocar a cada 10 minutos", "Trocar a cada 1 hora", "Trocar a cada 5 horas", "Trocar a cada 10 horas" }));
+
+        btnComecar.setText("Começar");
+        btnComecar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnComecarActionPerformed(evt);
+            }
+        });
+
+        btnParar.setText("Parar");
+        btnParar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPararActionPerformed(evt);
+            }
+        });
+
+        cmbInterface.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Gnome", "Mate", "Cinnamon" }));
+
+        btnEsconder.setText("Esconder");
+        btnEsconder.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEsconderActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(tbbPainelAbas, javax.swing.GroupLayout.PREFERRED_SIZE, 572, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(btnComecar, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnParar, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnEsconder, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(tbbPainelAbas, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(cmbTempo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(cmbInterface, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE)))))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(tbbPainelAbas, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(cmbInterface, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cmbTempo, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(tbbPainelAbas, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnComecar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnParar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnEsconder, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         bindingGroup.bind();
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnComecarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnComecarActionPerformed
+        if (tab == 0) {
+            objMainExchanger.setArrayImagens(objManipuladorTxt.lerTxt()); 
+            objMainExchanger.iniciarThread(cmbTempo.getSelectedItem().toString(), cmbInterface.getSelectedItem().toString());
+        } else {
+            try {
+                ImagensOnline objImagensOnline = new ImagensOnline(objMainExchanger, objPanelOnline.getTxtTema());
+                new Thread(objImagensOnline.baixarImagens).start();
+                objMainExchanger.iniciarThread(cmbTempo.getSelectedItem().toString(), cmbInterface.getSelectedItem().toString());
+            } catch (IOException ex) {
+                Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }//GEN-LAST:event_btnComecarActionPerformed
+
+    private void btnPararActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPararActionPerformed
+        objMainExchanger.pararThread();
+    }//GEN-LAST:event_btnPararActionPerformed
+
+    private void btnEsconderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEsconderActionPerformed
+        objManipuladorTxt = null;
+        this.setVisible(false);
+    }//GEN-LAST:event_btnEsconderActionPerformed
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
@@ -77,7 +175,7 @@ public class MainFrame extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-        
+
         //</editor-fold>
 
         /* Create and display the form */
@@ -87,6 +185,11 @@ public class MainFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnComecar;
+    private javax.swing.JButton btnEsconder;
+    private javax.swing.JButton btnParar;
+    private javax.swing.JComboBox<String> cmbInterface;
+    private javax.swing.JComboBox<String> cmbTempo;
     private javax.swing.JTabbedPane tbbPainelAbas;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables

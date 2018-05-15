@@ -1,11 +1,7 @@
 package classes;
 
-import frames.MainFrame;
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -19,78 +15,52 @@ public class MainExchanger {
     private int delay;
     private String comando;
     private ArrayList<String> arrayImagens;
-    private final File objFile;
-    private Scanner objSc;
 
     public MainExchanger() {
+        arrayImagens = new ArrayList();
+
         this.trocarPlanoDeFundo = () -> {
             try {
+                System.out.println("\nIniciando thread para trocar o plano de fundo: rodar = " + rodar + " - delay: " + delay + " - arrayImagens.size() = " + arrayImagens.size());
                 int i = 0;
                 String fullCommand;
-                
+
                 while (rodar == true) {
-                    try {
-                        fullCommand = comando + arrayImagens.get(i);
-                        System.out.println("Exibindo " + arrayImagens.get(i));
-                        i++;
-                        if (i >= arrayImagens.size()) {
-                            i = 0;
+                    if (arrayImagens.size() > 0) {
+                        try {
+                            fullCommand = comando + arrayImagens.get(i);
+                            System.out.println("Exibindo " + arrayImagens.get(i));
+                            i++;
+                            if (i >= arrayImagens.size()) {
+                                i = 0;
+                            }
+
+                            Runtime.getRuntime().exec(fullCommand, null);
+                            Thread.sleep(delay);
+                        } catch (IOException | InterruptedException ex) {
+                            Logger.getLogger(MainExchanger.class.getName()).log(Level.SEVERE, null, ex);
                         }
-                        
-                        Runtime.getRuntime().exec(fullCommand, null);
-                        Thread.sleep(delay);
-                    } catch (IOException | InterruptedException ex) {
-                        Logger.getLogger(MainExchanger.class.getName()).log(Level.SEVERE, null, ex);
+                    } else {
+                        Thread.sleep(1000);
                     }
                 }
             } catch (Exception e) {
-                System.out.println("Não foi possível começar a thread: " + e);
+                System.out.println("\nNão foi possível começar a thread para trocar o plano de fundo: " + e);
             }
         };
-        arrayImagens = new ArrayList();
-        objFile = new File("/opt/Gnome_Background_Exchanger/db.txt");
     }
 
     public void iniciarThread(String tempo, String systemInterface) {
-        lerTxt();
         rodar = true;
         delay = tempoToInt(tempo);
         comando = interfaceToCommand(systemInterface);
-
-        System.out.println("Iniciando thread: \nrodar = " + rodar + "\ndelay: " + delay + "\n");
 
         new Thread(trocarPlanoDeFundo).start();
     }
 
     public void pararThread() {
         rodar = false;
-        System.out.println("Thread parada: rodar = " + rodar + "\n");
-    }
-
-    public void abrirTxt() {
-        try {
-            Runtime.getRuntime().exec("gedit /opt/Gnome_Background_Exchanger/db.txt", null);
-        } catch (IOException ex) {
-            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
-    public void lerTxt() {
-        try {
-            System.out.println("Iniciando a leitura do db.txt" + "\n");
-
-            objSc = new Scanner(objFile);
-
-            arrayImagens.clear();
-
-            while (objSc.hasNextLine()) {
-                arrayImagens.add(objSc.nextLine());
-            }
-
-            objSc.close();
-        } catch (FileNotFoundException e) {
-            System.out.println(e);
-        }
+        System.out.println("\nThread para trocar o plano de fundo parada");
     }
 
     private int tempoToInt(String tempo) {
@@ -119,15 +89,27 @@ public class MainExchanger {
 
         return 0;
     }
-    
-    private String interfaceToCommand(String systemInterface){
-        switch(systemInterface){
-            case "Gnome": return "gsettings set org.gnome.desktop.background picture-uri file://";
-            case "Mate": return "gsettings set org.mate.background picture-filename ";
-            case "Cinnamon": return "gsettings set org.cinnamon.desktop.background picture-uri file://";
+
+    private String interfaceToCommand(String systemInterface) {
+        switch (systemInterface) {
+            case "Gnome":
+                return "gsettings set org.gnome.desktop.background picture-uri file://";
+            case "Mate":
+                return "gsettings set org.mate.background picture-filename ";
+            case "Cinnamon":
+                return "gsettings set org.cinnamon.desktop.background picture-uri file://";
         }
-        
+
         return "";
+    }
+
+    public void setArrayImagens(ArrayList<String> arrayImagens) {
+        this.arrayImagens = arrayImagens;
+    }
+
+    public void addTermoNoArrayImagens(String caminhoImg) {
+        arrayImagens.add(caminhoImg);
+        System.out.println("\"" + caminhoImg + "\" adicionado ao arrayImagens na classe MainExchanger");
     }
 
     private final Runnable trocarPlanoDeFundo;
