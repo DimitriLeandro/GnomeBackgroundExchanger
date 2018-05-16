@@ -18,6 +18,7 @@ public class MainFrame extends javax.swing.JFrame {
 
     //DECLARANDO OBJETOS E VARIÁVEIS DA CLASSE
     private MainExchanger objMainExchanger;
+    private ImagensOnline objImagensOnline;
     private byte tab;
     private ManipuladorTxt objManipuladorTxt;
     private PanelOnline objPanelOnline;
@@ -31,6 +32,7 @@ public class MainFrame extends javax.swing.JFrame {
 
         //INICIANDO OBJETOS E VARIÁVEIS
         tab = 0;
+        objImagensOnline = null;
         objMainExchanger = new MainExchanger();
         objManipuladorTxt = new ManipuladorTxt();
         objPanelOnline = new PanelOnline();
@@ -145,18 +147,18 @@ public class MainFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnComecarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnComecarActionPerformed
+        objMainExchanger.limparArrayImagens();
         //CASO O USUÁRIO ESTEJA NA TAB 0 -> OFFLINE
         //CASO TAB 1 -> ONLINE
         switch (tab) {
-            case 0:
-                objMainExchanger.limparArrayImagens();
+            case 0:                
                 objMainExchanger.setArrayImagens(objManipuladorTxt.lerTxt());
                 objMainExchanger.iniciarThread(cmbTempo.getSelectedItem().toString(), cmbInterface.getSelectedItem().toString());
                 break;
             case 1:
                 try {
-                    ImagensOnline objImagensOnline = new ImagensOnline(objMainExchanger, objPanelOnline.getTxtTema()); //no construtor vai o objMainExchanger por que lá no objImagensOnline vai ser preciso mecher no arrayImagens do objMainExchanger, e tem que ser o mesmo objeto
-                    new Thread(objImagensOnline.baixarImagens).start();
+                    objImagensOnline = new ImagensOnline(objMainExchanger, objPanelOnline.getTxtTema()); //no construtor vai o objMainExchanger por que lá no objImagensOnline vai ser preciso mecher no arrayImagens do objMainExchanger, e tem que ser o mesmo objeto
+                    objImagensOnline.iniciarThreadBaixarImagens();
                     objMainExchanger.iniciarThread(cmbTempo.getSelectedItem().toString(), cmbInterface.getSelectedItem().toString());
                 } catch (IOException ex) {
                     Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
@@ -170,6 +172,9 @@ public class MainFrame extends javax.swing.JFrame {
 
     private void btnPararActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPararActionPerformed
         objMainExchanger.pararThread();
+        if(objImagensOnline != null){
+            objImagensOnline.pararThreadBaixarImagens();
+        }
     }//GEN-LAST:event_btnPararActionPerformed
 
     private void btnEsconderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEsconderActionPerformed
