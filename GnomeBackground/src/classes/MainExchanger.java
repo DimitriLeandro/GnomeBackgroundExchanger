@@ -1,5 +1,6 @@
 package classes;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -11,7 +12,8 @@ import java.util.logging.Logger;
  */
 public class MainExchanger {
 
-    private boolean rodar = true;
+    //DECLARANDO
+    private boolean rodar; //depois de acionada, a thread de trocar o plano de fundo roda só se isso aqui for true, aí da parar a thread fazendo isso ser false
     private int delay;
     private String comando;
     private ArrayList<String> arrayImagens;
@@ -19,31 +21,46 @@ public class MainExchanger {
     public MainExchanger() {
         arrayImagens = new ArrayList();
 
+        //THREAD DE TROCAR O PLANO DE FUNDO
         this.trocarPlanoDeFundo = () -> {
             try {
-                System.out.println("\nIniciando thread para trocar o plano de fundo: rodar = " + rodar + " - delay: " + delay + " - arrayImagens.size() = " + arrayImagens.size());
+                System.out.println("Iniciando thread para trocar o plano de fundo: rodar = " + rodar + " - delay: " + delay + " - arrayImagens.size() = " + arrayImagens.size());
                 int i = 0;
                 String fullCommand;
+                File objFile; //esse objeto vai ser pra verificar se a imagem existe no pc
 
                 while (rodar == true) {
                     if (arrayImagens.size() > 0) {
-                        try {
-                            fullCommand = comando + arrayImagens.get(i);
-                            System.out.println("Exibindo " + arrayImagens.get(i));
-                            i++;
-                            if (i >= arrayImagens.size()) {
-                                i = 0;
-                            }
+                        //A PRIMEIRA COISA É VERIFICAR SE A IMAGEM EXISTE MESMO
+                        objFile = new File(arrayImagens.get(i));
 
-                            Runtime.getRuntime().exec(fullCommand, null);
-                            Thread.sleep(delay);
-                        } catch (IOException | InterruptedException ex) {
-                            Logger.getLogger(MainExchanger.class.getName()).log(Level.SEVERE, null, ex);
+                        if (objFile.exists() && !objFile.isDirectory()) {
+                            //AI SE EXISTIR, EXIBE
+                            try {
+                                fullCommand = comando + arrayImagens.get(i);
+                                System.out.println("Exibindo " + arrayImagens.get(i));
+                                Runtime.getRuntime().exec(fullCommand, null);
+                                Thread.sleep(delay);
+                            } catch (IOException | InterruptedException ex) {
+                                Logger.getLogger(MainExchanger.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        } else {
+                            System.out.println("O arquivo " + arrayImagens.get(i) + " não está sendo exibido pois não existe");
+                        }
+                        
+                        //PASSANDO PRA PRÓXIMA IMAGEM
+                        i++;
+                        if (i >= arrayImagens.size()) {
+                            i = 0;
                         }
                     } else {
                         Thread.sleep(1000);
                     }
                 }
+
+                //DESTRUINDO OBJETOS
+                objFile = null;
+
             } catch (Exception e) {
                 System.out.println("\nNão foi possível começar a thread para trocar o plano de fundo: " + e);
             }
@@ -60,7 +77,7 @@ public class MainExchanger {
 
     public void pararThread() {
         rodar = false;
-        System.out.println("\nThread para trocar o plano de fundo parada");
+        System.out.println("Thread para trocar o plano de fundo parada");
     }
 
     private int tempoToInt(String tempo) {
@@ -110,6 +127,11 @@ public class MainExchanger {
     public void addTermoNoArrayImagens(String caminhoImg) {
         arrayImagens.add(caminhoImg);
         System.out.println("\"" + caminhoImg + "\" adicionado ao arrayImagens na classe MainExchanger");
+    }
+
+    public void limparArrayImagens() {
+        this.arrayImagens.clear();
+        System.out.println("Limpando o arrayImagens");
     }
 
     private final Runnable trocarPlanoDeFundo;

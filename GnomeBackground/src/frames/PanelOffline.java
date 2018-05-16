@@ -1,6 +1,5 @@
 package frames;
 
-import classes.MainExchanger;
 import classes.ManipuladorTxt;
 
 /**
@@ -9,12 +8,10 @@ import classes.ManipuladorTxt;
  */
 public class PanelOffline extends javax.swing.JPanel {
 
-    private MainExchanger objMainExchanger;
     private ManipuladorTxt objManipuladorTxt;
     
-    public PanelOffline(MainExchanger objMainExchanger, ManipuladorTxt objManipuladorTxt) {
+    public PanelOffline(ManipuladorTxt objManipuladorTxt) { //AQUI EU JA RECEBO O OBJETO INSTANCIADO DA CLASSE MAINFRAME PRA NÃO PRECISAR GASTAR MAIS MEMÓRIA COM DOIS OBJETOS IGUAIS
         initComponents();
-        this.objMainExchanger = objMainExchanger;
         this.objManipuladorTxt = objManipuladorTxt;
     }
     

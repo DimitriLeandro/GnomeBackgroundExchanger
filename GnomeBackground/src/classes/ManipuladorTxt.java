@@ -14,7 +14,7 @@ import java.util.logging.Logger;
  * @author dimi
  */
 public class ManipuladorTxt {
-    
+
     public void abrirTxt() {
         try {
             Runtime.getRuntime().exec("gedit /opt/Gnome_Background_Exchanger/db.txt", null);
@@ -24,29 +24,33 @@ public class ManipuladorTxt {
     }
 
     public ArrayList<String> lerTxt() {
-        ArrayList<String> arrayImagens;
+        //INICIANDO OS OBJETOS
+        ArrayList<String> arrayImagens; //esse cara aqui vai ser o retorno
         File objFile;
-        
+        Scanner objSc;
+
         try {
             arrayImagens = new ArrayList();
             objFile = new File("/opt/Gnome_Background_Exchanger/db.txt");
-            Scanner objSc = new Scanner(objFile);
+            objSc = new Scanner(objFile);
 
-            arrayImagens.clear();
-
+            String linha;
             while (objSc.hasNextLine()) {
-                arrayImagens.add(objSc.nextLine());
+                linha = objSc.nextLine();
+                if (linha != null && !"".equals(linha)) {
+                    arrayImagens.add(linha);
+                }
             }
 
             objSc = null;
             objFile = null;
-            
+
             return arrayImagens;
-            
+
         } catch (FileNotFoundException e) {
-            System.out.println(e);
+            System.out.println("Problema ao ler o txt: " + e);
         }
-        
+
         return null;
     }
 }

@@ -16,21 +16,28 @@ import javax.swing.event.ChangeListener;
  */
 public class MainFrame extends javax.swing.JFrame {
 
-    protected MainExchanger objMainExchanger;
+    //DECLARANDO OBJETOS E VARIÁVEIS DA CLASSE
+    private MainExchanger objMainExchanger;
     private byte tab;
     private ManipuladorTxt objManipuladorTxt;
     private PanelOnline objPanelOnline;
+    private PanelOffline objPanelOffline;
 
     public MainFrame() {
+        //PADRÃO
         initComponents();
         this.setLocationRelativeTo(null);
         this.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/imagens/icon.png")));
 
+        //INICIANDO OBJETOS E VARIÁVEIS
         tab = 0;
         objMainExchanger = new MainExchanger();
         objManipuladorTxt = new ManipuladorTxt();
         objPanelOnline = new PanelOnline();
-        tbbPainelAbas.add("Offline", new PanelOffline(objMainExchanger, objManipuladorTxt));
+        objPanelOffline = new PanelOffline(objManipuladorTxt); //no construtor já vai um obj instânciado aqui no MainFrame mesmo, assim não preciso gastar mais memória criando dois objetos iguaizinhos da classe ManipuladroTxt
+
+        //ADICIONANDO OS PAINEIS NO JTABBEDPANE E O EVENTO DE TROCAR A ABA
+        tbbPainelAbas.add("Offline", objPanelOffline);
         tbbPainelAbas.add("Online", objPanelOnline);
         tbbPainelAbas.addChangeListener(new ChangeListener() {
             public void stateChanged(ChangeEvent e) {
@@ -38,6 +45,9 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
 
+        //DESTRUINDO OBJETOS OBJPANELOFFLINE
+        //esse eu ja posso destruir, já o objPanelOnline eu vou precisar pra pegar o tema escolhido pelo usuário
+        objPanelOffline = null;
     }
 
     @SuppressWarnings("unchecked")
@@ -135,17 +145,26 @@ public class MainFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnComecarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnComecarActionPerformed
-        if (tab == 0) {
-            objMainExchanger.setArrayImagens(objManipuladorTxt.lerTxt()); 
-            objMainExchanger.iniciarThread(cmbTempo.getSelectedItem().toString(), cmbInterface.getSelectedItem().toString());
-        } else {
-            try {
-                ImagensOnline objImagensOnline = new ImagensOnline(objMainExchanger, objPanelOnline.getTxtTema());
-                new Thread(objImagensOnline.baixarImagens).start();
+        //CASO O USUÁRIO ESTEJA NA TAB 0 -> OFFLINE
+        //CASO TAB 1 -> ONLINE
+        switch (tab) {
+            case 0:
+                objMainExchanger.limparArrayImagens();
+                objMainExchanger.setArrayImagens(objManipuladorTxt.lerTxt());
                 objMainExchanger.iniciarThread(cmbTempo.getSelectedItem().toString(), cmbInterface.getSelectedItem().toString());
-            } catch (IOException ex) {
-                Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
-            }
+                break;
+            case 1:
+                try {
+                    ImagensOnline objImagensOnline = new ImagensOnline(objMainExchanger, objPanelOnline.getTxtTema()); //no construtor vai o objMainExchanger por que lá no objImagensOnline vai ser preciso mecher no arrayImagens do objMainExchanger, e tem que ser o mesmo objeto
+                    new Thread(objImagensOnline.baixarImagens).start();
+                    objMainExchanger.iniciarThread(cmbTempo.getSelectedItem().toString(), cmbInterface.getSelectedItem().toString());
+                } catch (IOException ex) {
+                    Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                break;
+            default:
+                System.out.println("Algo deu muito errado, reinicie a aplicação!");
+                break;
         }
     }//GEN-LAST:event_btnComecarActionPerformed
 
@@ -154,7 +173,12 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btnPararActionPerformed
 
     private void btnEsconderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEsconderActionPerformed
-        objManipuladorTxt = null;
+        //JÁ QUE A APLICAÇÃO VAI SER ESCONDIDA, O USUÁRIO NÃO VAI MAIS CONSEGUIR ABRIR, ENTÃO JÁ POSSO MATAR TODOS OS OBJETOS, MENOS O MAINEXCHANGER
+        this.objManipuladorTxt = null;
+        this.objPanelOffline = null;
+        this.objPanelOnline = null;
+
+        //SUMIU
         this.setVisible(false);
     }//GEN-LAST:event_btnEsconderActionPerformed
 
