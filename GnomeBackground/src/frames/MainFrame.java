@@ -75,7 +75,7 @@ public class MainFrame extends javax.swing.JFrame {
         tbbPainelAbas.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         tbbPainelAbas.setPreferredSize(new java.awt.Dimension(572, 125));
 
-        cmbTempo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Trocar a cada 1 segundo", "Trocar a cada 5 segundos", "Trocar a cada 10 segundos", "Trocar a cada 30 segundos", "Trocar a cada 1 minuto", "Trocar a cada 5 minutos", "Trocar a cada 10 minutos", "Trocar a cada 1 hora", "Trocar a cada 5 horas", "Trocar a cada 10 horas" }));
+        cmbTempo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Trocar a cada 10 segundos", "Trocar a cada 30 segundos", "Trocar a cada 1 minuto", "Trocar a cada 5 minutos", "Trocar a cada 10 minutos", "Trocar a cada 1 hora", "Trocar a cada 5 horas", "Trocar a cada 10 horas" }));
 
         btnComecar.setText("Começar");
         btnComecar.addActionListener(new java.awt.event.ActionListener() {

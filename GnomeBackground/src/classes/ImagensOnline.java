@@ -14,6 +14,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import org.apache.commons.io.FileUtils;
 
 /**
@@ -64,13 +65,11 @@ public final class ImagensOnline {
                             objURLImagem.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95 Safari/537.11");
 
                             //SALVANDO A IMAGEM COM O NOME NO FORMATO yyyy-MM-dd'T'HH:mm:ss.SSSXXX QUE AI NÃO TEM ERRO
-                            if (rodarThread == true) {
-                                caminhoImg = "/opt/Gnome_Background_Exchanger/OnlineImages/" + new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX").format(Calendar.getInstance().getTime()) + ".jpeg";
-                                Files.copy(objURLImagem.getInputStream(), Paths.get(caminhoImg));
-                                objMainExchanger.addTermoNoArrayImagens(caminhoImg); //agora preciso colocar essa imagem no arrayImagens pro objMainExchanger ter o que exibir
-                                System.out.println("Imagem salva em: " + caminhoImg);
-                                contador++;
-                            }
+                            caminhoImg = "/opt/Gnome_Background_Exchanger/OnlineImages/" + new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX").format(Calendar.getInstance().getTime()) + ".jpeg";
+                            Files.copy(objURLImagem.getInputStream(), Paths.get(caminhoImg));
+                            objMainExchanger.addTermoNoArrayImagens(caminhoImg); //agora preciso colocar essa imagem no arrayImagens pro objMainExchanger ter o que exibir
+                            System.out.println("Imagem salva em: " + caminhoImg);
+                            contador++;
                         } catch (IOException e) {
                             System.out.println("Erro ao tentar salvar a imagem no computador: " + e);
                         }
@@ -78,11 +77,16 @@ public final class ImagensOnline {
                 }
 
                 System.out.println("A thread baixarImagens parou. Foram baixadas " + contador + " imagens");
+                if (rodarThread == true && contador == 0) {
+                    //SE ENTRAR AQUI É PQ TENTOU BAIXAR AS IMAGENS MAS NÃO TINHA NENHUM ACOM O TEMA ESCOLHIDO
+                    JOptionPane.showMessageDialog(null, "Não foram encontradas imagens com esse tema.");
+                }
 
                 //AGORA QUE TERMINOU DE BAIXAR, VOU DESTRUIR OS OBJETOS
                 objURLSite = null;
                 objURLImagem = null;
                 objBR = null;
+                rodarThread = false;
             } catch (IOException ex) {
                 Logger.getLogger(ImagensOnline.class.getName()).log(Level.SEVERE, null, ex);
             } finally {

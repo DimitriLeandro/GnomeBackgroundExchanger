@@ -28,6 +28,7 @@ public class PanelOnline extends javax.swing.JPanel {
         txtTema = new javax.swing.JTextField();
 
         txtTema.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
+        txtTema.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtTema.setText("Theme");
         txtTema.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
