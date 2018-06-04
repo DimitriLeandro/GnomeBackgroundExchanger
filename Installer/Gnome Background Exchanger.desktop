@@ -1,8 +1,9 @@
 [Desktop Entry]
 Encoding=UTF-8
+Version=1.0
 Type=Application
-Exec=java -cp /opt/Gnome_Background_Exchanger/gbexc.jar:lib/* frames.MainFrame
-Icon=/opt/Gnome_Background_Exchanger/icon.png
+Terminal=false
 Name=Gnome Background Exchanger
+Exec=java -jar /opt/Gnome_Background_Exchanger/gbexc.jar
+Icon=/opt/Gnome_Background_Exchanger/icon.png
 Comment=Aplicação para trocar o plano de fundo automaticamente
-Name[en_US]=Gnome Background Exchanger
